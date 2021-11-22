@@ -1,63 +1,87 @@
+package assessment2;
+
 import java.util.Scanner;
 
 public class ShoppingCartManager {
-    public static void userInput(ItemToPurchase item){
-        Scanner scanner=new Scanner(System.in);
+    public static void getItemToPurchaseFromUser(ItemToPurchase item){
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the item name:");
-        String name=scanner.nextLine();
+        item.setName(scanner.nextLine());
         System.out.println("Enter the item price:");
-        int price=scanner.nextInt();
+        item.setPrice(scanner.nextInt());
         System.out.println("Enter the item quantity:");
-        int quantity=scanner.nextInt();
-        item.setItemName(name);
-        item.setItemPrice(price);
-        item.setItemQuantity(quantity);
+        item.setQuantity(scanner.nextInt());
     }
     public static void stage1(ItemToPurchase item){
-        item = new ItemToPurchase();
-        userInput(item);
-        System.out.println(item.toString());
+        getItemToPurchaseFromUser(item);
+        System.out.println(item);
     }
     public static void stage2(ShoppingCart cart){
-        // Prompt user for a name and a date
-        Scanner scanner=new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the customer name:");
-        String customerName=scanner.nextLine();
+        cart.setCustomerName(scanner.nextLine());
         System.out.println("Enter the current date:");
-        String currentDate=scanner.nextLine();
-        // first-time calling printTotal()
-        cart.setCustomerName(customerName);
-        cart.setDate(currentDate);
+        cart.setCurrentDate(scanner.nextLine());
         cart.printTotal();
-
-        ItemToPurchase[] item=new ItemToPurchase[1];
-        userInput(item[0]);
-        scanner.nextLine();
-        userInput(item[1]);
-
-        // second-time calling printTotal()
+        ItemToPurchase item1 = new ItemToPurchase();
+        getItemToPurchaseFromUser(item1);
+        ItemToPurchase item2 = new ItemToPurchase();
+        getItemToPurchaseFromUser(item2);
+        cart.addItem(item1);
+        cart.addItem(item2);
         cart.printTotal();
-
     }
 
     public static void stage3(ShoppingCart cart){
-
+        String ans;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Do you want to remove an item from shopping cart? Y/N");
+        ans = scanner.nextLine();
+        if (ans.equals("Y")){
+            System.out.println("Enter the name of the item that you wish to remove:");
+            ans = scanner.nextLine();
+            cart.removeItem(ans);
+            cart.printTotal();
+        }
+        System.out.println("Do you want to modify an item from shopping cart? Y/N");
+        ans = scanner.nextLine();
+        if (ans.equals("Y")){
+            System.out.println("Enter the name of the item that you wish to modify:");
+            ans = scanner.nextLine();
+            cart.modifyItem(ans);
+            cart.printTotal();
+        }
+        System.out.println("Do you want to check-out? Y/N");
+        ans = scanner.nextLine();
+        if (ans.equals("Y")){
+            cart.checkout();
+        }
     }
 
     public static void stage4(VIPShoppingCart cart){
-
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the customer name:");
+        cart.setCustomerName(scanner.nextLine());
+        System.out.println("Enter the current date:");
+        cart.setCurrentDate(scanner.nextLine());
+        System.out.println("Enter the points that the customer has:");
+        cart.setPoints(scanner.nextInt());
+        ItemToPurchase item = new ItemToPurchase();
+        getItemToPurchaseFromUser(item);
+        cart.addItem(item);
+        cart.checkout();
     }
 
     public static void main(String[] args) {
         ItemToPurchase item = new ItemToPurchase();
         ShoppingCart cart = new ShoppingCart();
         VIPShoppingCart vipCart = new VIPShoppingCart();
-        System.out.println("***************Stage 1***************");
-        stage1(item);
-        System.out.println("***************Stage 2***************");
-        stage2(cart);
-        System.out.println("***************Stage 3***************");
-        stage3(cart);
+//        System.out.println("***************Stage 1***************");
+//        stage1(item);
+//        System.out.println("***************Stage 2***************");
+//        stage2(cart);
+//        System.out.println("***************Stage 3***************");
+//        stage3(cart);
         System.out.println("***************Stage 4***************");
         stage4(vipCart);
     }

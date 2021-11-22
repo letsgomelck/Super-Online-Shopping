@@ -1,123 +1,134 @@
-import java.util.Arrays;
-import java.util.Objects;
+package assessment2;
+
 import java.util.Scanner;
 
 public class ShoppingCart {
-    // private fields
     private String customerName;
     private String currentDate;
-    private ItemToPurchase[] cartItems;
-//    private ItemToPurchase[] cartItems = new ItemToPurchase[CAPACITY];
     private static final int CAPACITY = 100;
-    private int itemCount;
-    // No-argument Constructor
+    private ItemToPurchase[] cartItems;
+    private int numItems;
+
+
+//    public ShoppingCart(String name, String date){
+//        this.customerName = name;
+//        this.currentDate = date;
+//        this.cartItems = new ItemToPurchase[CAPACITY];
+//        this.numItems = 0;
+//    }
+
     public ShoppingCart(){
-        this.customerName="John Doe";
-        this.currentDate="1 January 2021";
-        this.cartItems=new ItemToPurchase[CAPACITY];
-        this.itemCount=0;
-    }
-    // Constructor
-    public ShoppingCart(String name,String date){
-        this.customerName=name;
-        this.currentDate=date;
-        this.cartItems=new ItemToPurchase[CAPACITY];
-        this.itemCount=0;
-    }
-    // Accessor
-    public String getCustomerName(){
-        return customerName;
-    }
-    // Mutator
-    public void setCustomerName(String name){
-        this.customerName=name;
+        this.customerName = "John Doe";
+        this.currentDate = "1 January 2021";
+        this.cartItems = new ItemToPurchase[CAPACITY];
+        this.numItems = 0;
     }
 
-    // Accessor
-    public String getDate(){
-        return currentDate;
-    }
-    // Mutator
-    public void setDate(String date){
-        this.currentDate=date;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
-    // Method to add items
+    public void setCurrentDate(String date){
+        this.currentDate = date;
+    }
+
+    public int getNumItems(){
+        return numItems;
+    }
+
+    public void setNumItems(int count){
+        numItems = count;
+    }
+
+    public ItemToPurchase[] getCartItems(){
+        return cartItems;
+    }
+
     public boolean addItem(ItemToPurchase item){
-        if(!(Objects.equals(item.getItemName(), Arrays.toString(cartItems)))) {
-                cartItems[itemCount++]=item;
-                return true;
-            }else if(itemCount > CAPACITY){
-                // else if shopping cart is full,
-                // items cannot be added and print" SHOPPING CART IS FULL." and return false.
-                System.out.println("SHOPPING CART IS FULL");
-                return false;
-            }else{
-                // Otherwise,add item to shopping cart and returns true.
-                System.out.println("ITEM ALREADY EXISTS.");
-                return false;
+        if (numItems == CAPACITY){
+            System.out.println("SHOPPING CART IS FULL.");
+            return false;
+        }else{
+            for (int i = 0; i < numItems; i++){
+                if (cartItems[i].getName().equals(item.getName())){
+                    System.out.println("ITEM ALREADY EXISTS.");
+                    return false;
+                }
             }
-    }
-    public int getNumItemsInCart() {
-        int NumItems=0;
-        for (int i=0;i<cartItems.length;i++){
-//            ItemToPurchase item=cartItems.at(i);
-//            NumItems += (cartItems.at(i)).getItemQuantity(i);
-//            NumItems = NumItems+ cartItems[i].getItemQuantity();
+            cartItems[numItems++] = item;
+            return true;
         }
-        return NumItems;
-//        return cartItems[itemCount++].getItemQuantity();
     }
-    
-    // Method returns total cost of items in cart
+
+    public int getNumItemsInCart(){
+        int count = 0;
+        for (int i = 0; i < numItems; i++){
+            count += cartItems[i].getQuantity();
+        }
+        return count;
+    }
+
     public int getCostOfCart(){
-        int cost=0;
-        for (int i=0;i<cartItems.length;i++){
-            cost = cost+ cartItems[i].getItemQuantity()*cartItems[i].getItemPrice();
+        int sum = 0;
+        for (int i=0; i < numItems; i++){
+            sum += cartItems[i].getTotalPrice();
         }
-        return cost;
-//        return cartItems[itemCount++].getTotalPrice();
+        return sum;
+    }
+
+    public void removeItem(String itemName){
+        for (int i = 0; i < numItems; i++){
+            if (cartItems[i].getName().equals(itemName)){
+                for (int j = i; j < numItems - 1; j++){
+                    cartItems[j] = cartItems[j+1];
+
+                }
+                numItems --;
+                System.out.println("Item " + itemName + " is removed from shopping cart.");
+                return;
+            }
+        }
+        System.out.println("Item not found in cart. Nothing removed.");
+    }
+
+    public void modifyItem(String itemName){
+        for (int i = 0; i < numItems; i++){
+            if (cartItems[i].getName().equals(itemName)){
+                System.out.println("Please enter the new quantity: ");
+                Scanner scanner = new Scanner(System.in);
+                int quantity = scanner.nextInt();
+                cartItems[i].setQuantity(quantity);
+                return;
+            }
+        }
+        System.out.println("Item not found in cart. Nothing modified");
+    }
+
+    public void checkout(){
+        if (numItems > 0) {
+            this.printTotal();
+            for (int i = 0; i < numItems; i++){
+                cartItems[i] = null;
+            }
+            numItems = 0;
+            System.out.println("Thanks for shopping.");
+            return;
+        }
+        System.out.println("SHOPPING CART IS EMPTY.");
+
     }
 
     public void printTotal(){
-        if(itemCount==0){
-            System.out.println(customerName+" - "+currentDate);
+        System.out.println(customerName + " - " + currentDate);
+        if (numItems > 0) {
+            System.out.println("Number of Items: " + getNumItemsInCart());
+            for (int i = 0; i < numItems; i++) {
+                System.out.println(cartItems[i]);
+            }
+            System.out.println("Total: $" + getCostOfCart());
+        }else{
             System.out.println("SHOPPING CART IS EMPTY.");
-        }else {
-            System.out.println(customerName + currentDate);
-            System.out.println("Number of Items: "+getNumItemsInCart());
-            System.out.println(cartItems[itemCount].toString());
-            System.out.println("Total: $"+getCostOfCart());
         }
     }
-
-//    public String removeItem(String itemName){
-//        //Remove item if item's name equals itemName
-//        if(cartItems[itemCount].getItemName().equals(itemName)){
-//            System.out.println("item "+itemName+" is removed from shopping cart");
-//        }
-//        System.out.println("Item not found in cart. Nothing removed.");
-//
-//    }
-
-//    public String modifyItem(String itemName){
-//        //Modify item's quantity
-//
-//        for (int i=0;i<cartItems.length;i++){
-//            if(cartItems[i].getItemName().equals(itemName)){
-//                System.out.println("Please  enter the new quantity:");
-//                //update quantity to the user entered
-//            }
-//            System.out.println("Item not found in cart. Nothing modified.");
-//        }
-//    }
-
-    public void checkout(){
-        printTotal();
-
-    }
-
-
-
 
 }

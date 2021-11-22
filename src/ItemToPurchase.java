@@ -1,68 +1,59 @@
-import java.util.Scanner;
+package assessment2;
 
 public class ItemToPurchase {
-
-    //Attributes;
     private String itemName;
     private int itemPrice;
     private int itemQuantity;
 
-    // Mutator
-    public void setItemName(String name) {
+    public ItemToPurchase(){
+        this.itemName = "none";
+        this.itemQuantity = 0;
+        this.itemPrice = 0;
+    }
+//    public ItemToPurchase(String name, int price, int quantity){
+//        if (name == null || price < 0 || quantity < 1)
+//            throw new IllegalArgumentException("invalid argument null");
+//        this.itemName = name;
+//        this.itemPrice = price;
+//        this.itemQuantity = quantity;
+//    }
+
+    public void setName(String name){
+        if (name == null )
+            throw new IllegalArgumentException("invalid argument null");
         this.itemName = name;
     }
-    // Accessor
-    public String getItemName() {
-        return itemName;
-    }
 
-    // Mutator
-    public void setItemPrice(int price) {
+    public void setPrice(int price){
+        if (price < 0 )
+            throw new IllegalArgumentException("invalid argument null");
         this.itemPrice = price;
     }
-    // Accessor
-    public int getItemPrice() {
-        return itemPrice;
-    }
 
-    // Mutator
-    public void setItemQuantity(int quantity) {
+    public void setQuantity(int quantity){
+        if (quantity < 1)
+            throw new IllegalArgumentException("invalid argument null");
         this.itemQuantity = quantity;
     }
-    // Accessor
-    public int getItemQuantity() {
-        return itemQuantity;
+
+    public String getName(){
+        return this.itemName;
     }
 
-    //No-argument Constructors
-    public ItemToPurchase(){
-        this.itemName= "none";
-        this.itemPrice=0;
-        this.itemQuantity=0;
+    public int getPrice(){
+        return this.itemPrice;
     }
 
-    // Constructors
-    // if any of the parameter passed in is invalid, throw illegalArgumentException
-    public ItemToPurchase(String name,int price,int quantity) {
-        // Pre-Condition
-        if(name == null)
-            throw new IllegalArgumentException();
-        if(price>=0){
-            this.itemPrice=price;
-        }
-        if(quantity>=1){
-            this.itemQuantity=quantity;
-        }
+    public int getQuantity(){
+        return this.itemQuantity;
     }
 
-    // Public Method
     public int getTotalPrice(){
-        return itemPrice*itemQuantity;
+        return itemPrice * itemQuantity;
     }
 
-    // Override
     public String toString(){
-        return getItemName()+" "+getItemQuantity()+ " @ $"+ getItemPrice()+" = $"+getTotalPrice();
+        return this.itemName + " " + this.itemQuantity + " @ $" + this.itemPrice + " = $" + getTotalPrice();
     }
 
 }
